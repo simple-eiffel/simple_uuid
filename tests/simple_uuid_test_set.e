@@ -15,6 +15,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_length
 			-- Test v4 UUID has correct length.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -26,6 +28,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_version
 			-- Test v4 UUID has version 4.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4", "covers/{SIMPLE_UUID}.version"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -37,6 +41,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_variant
 			-- Test v4 UUID has RFC 4122 variant.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -49,6 +55,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_uniqueness
 			-- Test v4 UUIDs are unique.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4_string"
 		local
 			gen: SIMPLE_UUID
 			uuid1, uuid2: STRING
@@ -61,6 +69,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_string_format
 			-- Test v4 UUID string format.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4_string"
 		local
 			gen: SIMPLE_UUID
 			uuid: STRING
@@ -77,6 +87,8 @@ feature -- Test: UUID v4 Generation
 
 	test_new_v4_compact
 			-- Test v4 UUID compact string.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v4_compact"
 		local
 			gen: SIMPLE_UUID
 			uuid: STRING
@@ -91,6 +103,8 @@ feature -- Test: UUID v7 Generation
 
 	test_new_v7_length
 			-- Test v7 UUID has correct length.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v7"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -102,6 +116,8 @@ feature -- Test: UUID v7 Generation
 
 	test_new_v7_version
 			-- Test v7 UUID has version 7.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v7", "covers/{SIMPLE_UUID}.version"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -113,6 +129,8 @@ feature -- Test: UUID v7 Generation
 
 	test_new_v7_variant
 			-- Test v7 UUID has RFC 4122 variant.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v7"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -124,6 +142,8 @@ feature -- Test: UUID v7 Generation
 
 	test_new_v7_sortable
 			-- Test v7 UUIDs share timestamp prefix when generated together.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v7_string"
 		local
 			gen: SIMPLE_UUID
 			uuid1, uuid2: STRING
@@ -138,6 +158,8 @@ feature -- Test: UUID v7 Generation
 
 	test_new_v7_string_format
 			-- Test v7 UUID string format.
+		note
+			testing: "covers/{SIMPLE_UUID}.new_v7_string", "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 			uuid: STRING
@@ -152,6 +174,8 @@ feature -- Test: Formatting
 
 	test_to_string
 			-- Test UUID to string conversion.
+		note
+			testing: "covers/{SIMPLE_UUID}.to_string", "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -166,6 +190,8 @@ feature -- Test: Formatting
 
 	test_to_compact_string
 			-- Test UUID to compact string.
+		note
+			testing: "covers/{SIMPLE_UUID}.to_compact_string"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -182,6 +208,8 @@ feature -- Test: Parsing
 
 	test_from_string
 			-- Test parsing UUID from string.
+		note
+			testing: "covers/{SIMPLE_UUID}.from_string", "covers/{SIMPLE_UUID}.to_string"
 		local
 			gen: SIMPLE_UUID
 			original: STRING
@@ -197,6 +225,8 @@ feature -- Test: Parsing
 
 	test_from_compact_string
 			-- Test parsing UUID from compact string.
+		note
+			testing: "covers/{SIMPLE_UUID}.from_string", "covers/{SIMPLE_UUID}.to_compact_string"
 		local
 			gen: SIMPLE_UUID
 			original: STRING
@@ -212,6 +242,8 @@ feature -- Test: Parsing
 
 	test_from_known_uuid
 			-- Test parsing a known UUID.
+		note
+			testing: "covers/{SIMPLE_UUID}.from_string"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -228,6 +260,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_correct
 			-- Test validation of correct UUID.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -237,6 +271,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_uppercase
 			-- Test validation accepts uppercase.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -246,6 +282,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_wrong_length
 			-- Test validation rejects wrong length.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -255,6 +293,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_wrong_hyphens
 			-- Test validation rejects wrong hyphen positions.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -264,6 +304,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_invalid_char
 			-- Test validation rejects invalid characters.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -273,6 +315,8 @@ feature -- Test: Validation
 
 	test_is_valid_uuid_compact
 			-- Test validation of compact UUID.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_valid_uuid_compact"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -284,6 +328,8 @@ feature -- Test: Nil UUID
 
 	test_nil_uuid
 			-- Test nil UUID generation.
+		note
+			testing: "covers/{SIMPLE_UUID}.nil_uuid", "covers/{SIMPLE_UUID}.is_nil"
 		local
 			gen: SIMPLE_UUID
 			uuid: ARRAY [NATURAL_8]
@@ -296,6 +342,8 @@ feature -- Test: Nil UUID
 
 	test_nil_uuid_string
 			-- Test nil UUID string.
+		note
+			testing: "covers/{SIMPLE_UUID}.nil_uuid_string"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -305,6 +353,8 @@ feature -- Test: Nil UUID
 
 	test_is_nil_false_for_v4
 			-- Test is_nil returns false for v4 UUID.
+		note
+			testing: "covers/{SIMPLE_UUID}.is_nil", "covers/{SIMPLE_UUID}.new_v4"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -316,6 +366,8 @@ feature -- Test: Version Detection
 
 	test_version_v4
 			-- Test version detection for v4.
+		note
+			testing: "covers/{SIMPLE_UUID}.version", "covers/{SIMPLE_UUID}.new_v4"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -325,6 +377,8 @@ feature -- Test: Version Detection
 
 	test_version_v7
 			-- Test version detection for v7.
+		note
+			testing: "covers/{SIMPLE_UUID}.version", "covers/{SIMPLE_UUID}.new_v7"
 		local
 			gen: SIMPLE_UUID
 		do
@@ -334,6 +388,8 @@ feature -- Test: Version Detection
 
 	test_version_from_string
 			-- Test version detection from string.
+		note
+			testing: "covers/{SIMPLE_UUID}.version_from_string", "covers/{SIMPLE_UUID}.new_v4_string"
 		local
 			gen: SIMPLE_UUID
 			uuid: STRING
