@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLE_UUID API Reference</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="../images/logo.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>SIMPLE_UUID</h1>
+        <p class="tagline">API Reference</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="#v4">UUID v4</a></li>
+            <li><a href="#v7">UUID v7</a></li>
+            <li><a href="#formatting">Formatting</a></li>
+            <li><a href="#parsing">Parsing</a></li>
+            <li><a href="#validation">Validation</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Class Overview</h2>
+            <p>
+                <code>SIMPLE_UUID</code> generates RFC 9562 compliant UUIDs. It supports UUID v4 (random)
+                and UUID v7 (timestamp-based), with full Design by Contract support.
+            </p>
+
+            <div class="api-section">
+                <h3>Creation</h3>
+                <div class="signature">create gen.make</div>
+                <p>Initialize the UUID generator with a time-based random seed.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: random_created: random /= Void</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="v4">
+            <h2>UUID v4 (Random)</h2>
+            <p>UUID v4 uses 122 random bits, providing maximum uniqueness without timestamp information.</p>
+
+            <div class="api-section">
+                <h3>new_v4: ARRAY [NATURAL_8]</h3>
+                <div class="signature">uuid_bytes := gen.new_v4</div>
+                <p>Generate a new random UUID v4 as a 16-byte array.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: correct_length: Result.count = 16</div>
+                    <div class="ensure">ensure: version_4: (Result [7] & 0xF0) = 0x40</div>
+                    <div class="ensure">ensure: variant_rfc4122: (Result [9] & 0xC0) = 0x80</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>new_v4_string: STRING</h3>
+                <div class="signature">uuid := gen.new_v4_string</div>
+                <p>Generate a new random UUID v4 as a hyphenated string (36 characters).</p>
+                <p>Example: <code>550e8400-e29b-41d4-a716-446655440000</code></p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: valid_format: is_valid_uuid (Result)</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 36</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>new_v4_compact: STRING</h3>
+                <div class="signature">uuid := gen.new_v4_compact</div>
+                <p>Generate a new random UUID v4 without hyphens (32 characters).</p>
+                <p>Example: <code>550e8400e29b41d4a716446655440000</code></p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: no_hyphens: not Result.has ('-')</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 32</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="v7">
+            <h2>UUID v7 (Timestamp)</h2>
+            <p>UUID v7 embeds a Unix millisecond timestamp in the first 48 bits, making UUIDs sortable by creation time.</p>
+
+            <div class="api-section">
+                <h3>new_v7: ARRAY [NATURAL_8]</h3>
+                <div class="signature">uuid_bytes := gen.new_v7</div>
+                <p>Generate a new timestamp-based UUID v7 as a 16-byte array.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: correct_length: Result.count = 16</div>
+                    <div class="ensure">ensure: version_7: (Result [7] & 0xF0) = 0x70</div>
+                    <div class="ensure">ensure: variant_rfc4122: (Result [9] & 0xC0) = 0x80</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>new_v7_string: STRING</h3>
+                <div class="signature">uuid := gen.new_v7_string</div>
+                <p>Generate a new timestamp-based UUID v7 as a hyphenated string.</p>
+                <p>Example: <code>0190a926-3b00-7abc-8def-123456789abc</code></p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: valid_format: is_valid_uuid (Result)</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 36</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>new_v7_compact: STRING</h3>
+                <div class="signature">uuid := gen.new_v7_compact</div>
+                <p>Generate a new timestamp-based UUID v7 without hyphens.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: no_hyphens: not Result.has ('-')</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 32</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="formatting">
+            <h2>Formatting Features</h2>
+
+            <div class="api-section">
+                <h3>to_string (a_uuid: ARRAY [NATURAL_8]): STRING</h3>
+                <div class="signature">formatted := gen.to_string (uuid_bytes)</div>
+                <p>Convert UUID bytes to hyphenated string format.</p>
+                <p>Format: <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code></p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_uuid: a_uuid.count = 16</div>
+                    <div class="ensure">ensure: correct_format: Result.count = 36</div>
+                    <div class="ensure">ensure: has_hyphens: Result.occurrences ('-') = 4</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>to_compact_string (a_uuid: ARRAY [NATURAL_8]): STRING</h3>
+                <div class="signature">compact := gen.to_compact_string (uuid_bytes)</div>
+                <p>Convert UUID bytes to string without hyphens.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_uuid: a_uuid.count = 16</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 32</div>
+                    <div class="ensure">ensure: no_hyphens: not Result.has ('-')</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="parsing">
+            <h2>Parsing Features</h2>
+
+            <div class="api-section">
+                <h3>from_string (a_string: STRING): ARRAY [NATURAL_8]</h3>
+                <div class="signature">uuid_bytes := gen.from_string ("550e8400-e29b-41d4-a716-446655440000")</div>
+                <p>Parse a UUID string (with or without hyphens) to a 16-byte array.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_input: is_valid_uuid (a_string) or is_valid_uuid_compact (a_string)</div>
+                    <div class="ensure">ensure: correct_length: Result.count = 16</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="validation">
+            <h2>Validation Features</h2>
+
+            <div class="api-section">
+                <h3>is_valid_uuid (a_string: STRING): BOOLEAN</h3>
+                <div class="signature">if gen.is_valid_uuid (input) then ...</div>
+                <p>Check if a string is a valid hyphenated UUID (36 characters with hyphens at positions 9, 14, 19, 24).</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: string_not_void: a_string /= Void</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>is_valid_uuid_compact (a_string: STRING): BOOLEAN</h3>
+                <div class="signature">if gen.is_valid_uuid_compact (input) then ...</div>
+                <p>Check if a string is a valid compact UUID (32 hexadecimal characters, no hyphens).</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: string_not_void: a_string /= Void</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison">
+            <h2>Comparison Features</h2>
+
+            <div class="api-section">
+                <h3>is_nil (a_uuid: ARRAY [NATURAL_8]): BOOLEAN</h3>
+                <div class="signature">if gen.is_nil (uuid_bytes) then ...</div>
+                <p>Check if the UUID is the nil UUID (all zeros).</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_uuid: a_uuid.count = 16</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>nil_uuid: ARRAY [NATURAL_8]</h3>
+                <div class="signature">null_uuid := gen.nil_uuid</div>
+                <p>Return the nil UUID (all zeros) as a byte array.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="ensure">ensure: correct_length: Result.count = 16</div>
+                    <div class="ensure">ensure: is_nil: is_nil (Result)</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>nil_uuid_string: STRING</h3>
+                <div class="signature">Nil_uuid_string = "00000000-0000-0000-0000-000000000000"</div>
+                <p>The nil UUID as a constant string.</p>
+            </div>
+        </section>
+
+        <section id="version-detection">
+            <h2>Version Detection</h2>
+
+            <div class="api-section">
+                <h3>version (a_uuid: ARRAY [NATURAL_8]): INTEGER</h3>
+                <div class="signature">v := gen.version (uuid_bytes)</div>
+                <p>Get the version number (0-15) from UUID bytes. Common values: 4 (random), 7 (timestamp).</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_uuid: a_uuid.count = 16</div>
+                    <div class="ensure">ensure: valid_version: Result >= 0 and Result <= 15</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h3>version_from_string (a_string: STRING): INTEGER</h3>
+                <div class="signature">v := gen.version_from_string ("550e8400-e29b-41d4-a716-446655440000")</div>
+                <p>Get the version number from a UUID string.</p>
+                <div class="contracts">
+                    <h4>Contracts</h4>
+                    <div class="require">require: valid_uuid: is_valid_uuid (a_string) or is_valid_uuid_compact (a_string)</div>
+                    <div class="ensure">ensure: valid_version: Result >= 0 and Result <= 15</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="constants">
+            <h2>Constants</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Constant</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Hex_chars</code></td>
+                        <td><code>0123456789abcdef</code></td>
+                        <td>Hexadecimal characters for formatting</td>
+                    </tr>
+                    <tr>
+                        <td><code>Nil_uuid_string</code></td>
+                        <td><code>00000000-0000-0000-0000-000000000000</code></td>
+                        <td>The nil UUID as string</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="invariants">
+            <h2>Class Invariants</h2>
+            <div class="contracts">
+                <div class="ensure">invariant: random_exists: random /= Void</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            <a href="../index.html">&larr; Back to simple_uuid</a>
+        </p>
+        <p class="copyright">
+            Copyright &copy; 2024-2025 Larry Rix. MIT License.
+        </p>
+    </footer>
+</body>
+</html>

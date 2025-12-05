@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>simple_uuid - RFC 9562 UUID Generation for Eiffel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_uuid</h1>
+        <p class="tagline">RFC 9562 Compliant UUID Generation for Eiffel</p>
+        <div class="badges">
+            <span class="badge badge-rfc">RFC 9562</span>
+            <span class="badge badge-version">v1.0.0</span>
+            <span class="badge badge-license">MIT</span>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="api/simple_uuid.html">API Reference</a></li>
+            <li><a href="https://github.com/ljr1981/simple_uuid">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>
+                <strong>simple_uuid</strong> is a lightweight UUID generation library for Eiffel
+                supporting both UUID v4 (random) and UUID v7 (timestamp-based) as specified in
+                RFC 9562 (the successor to RFC 4122).
+            </p>
+            <p>
+                Part of the <strong>simple_*</strong> ecosystem of focused, single-purpose Eiffel libraries.
+            </p>
+        </section>
+
+        <section id="quick-start">
+            <h2>Quick Start</h2>
+
+            <div class="quick-start">
+                <h3>Installation</h3>
+                <p>Add to your ECF file:</p>
+<pre><code>&lt;library name="simple_uuid" location="$SIMPLE_UUID/simple_uuid.ecf"/&gt;</code></pre>
+                <p>Set environment variable:</p>
+<pre><code>set SIMPLE_UUID=D:\path\to\simple_uuid</code></pre>
+            </div>
+
+            <h3>Generate UUID v4 (Random)</h3>
+<pre><code><span class="keyword">local</span>
+    gen: <span class="type">SIMPLE_UUID</span>
+    uuid: <span class="type">STRING</span>
+<span class="keyword">do</span>
+    <span class="keyword">create</span> gen.make
+
+    <span class="comment">-- Generate random UUID</span>
+    uuid := gen.new_v4_string
+    <span class="comment">-- Result: "550e8400-e29b-41d4-a716-446655440000"</span>
+<span class="keyword">end</span></code></pre>
+
+            <h3>Generate UUID v7 (Timestamp)</h3>
+<pre><code><span class="comment">-- UUID v7 is sortable by creation time</span>
+uuid := gen.new_v7_string
+<span class="comment">-- Result: "0190a926-3b00-7abc-8def-123456789abc"</span>
+<span class="comment">-- First 48 bits encode Unix milliseconds timestamp</span></code></pre>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>UUID v4 (Random)</h4>
+                    <p>122 random bits providing 5.3 x 10^36 unique identifiers. Most common UUID format.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>UUID v7 (Timestamp)</h4>
+                    <p>Millisecond-precision timestamp + random bits. Sortable by creation time for database efficiency.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>String Formatting</h4>
+                    <p>Standard hyphenated format (36 chars) or compact format (32 chars) for storage efficiency.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Parsing</h4>
+                    <p>Parse UUID strings (with or without hyphens) back to byte arrays for processing.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Validation</h4>
+                    <p>Validate UUID strings before parsing with <code>is_valid_uuid</code> and <code>is_valid_uuid_compact</code>.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Version Detection</h4>
+                    <p>Detect UUID version from bytes or string with <code>version</code> and <code>version_from_string</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="uuid-formats">
+            <h2>UUID Format</h2>
+            <p>UUIDs follow the format: <code>xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx</code></p>
+            <ul>
+                <li><strong>M</strong> = Version (4 for random, 7 for timestamp)</li>
+                <li><strong>N</strong> = Variant (8, 9, a, or b for RFC 4122/9562)</li>
+            </ul>
+
+            <h3>UUID v4 Example</h3>
+<pre><code>550e8400-e29b-<span class="keyword">4</span>1d4-<span class="keyword">a</span>716-446655440000
+                ^    ^
+                |    +-- Variant (RFC 4122)
+                +------- Version 4 (Random)</code></pre>
+
+            <h3>UUID v7 Example</h3>
+<pre><code>0190a926-3b00-<span class="keyword">7</span>abc-<span class="keyword">8</span>def-123456789abc
+|____________|  ^    ^
+      |         |    +-- Variant (RFC 4122)
+      |         +------- Version 7 (Timestamp)
+      +----------------- Unix ms timestamp (48 bits)</code></pre>
+        </section>
+
+        <section id="api-summary">
+            <h2>API Summary</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>new_v4</code></td>
+                        <td>Generate random UUID v4 as byte array</td>
+                    </tr>
+                    <tr>
+                        <td><code>new_v4_string</code></td>
+                        <td>Generate random UUID v4 as hyphenated string</td>
+                    </tr>
+                    <tr>
+                        <td><code>new_v4_compact</code></td>
+                        <td>Generate random UUID v4 without hyphens</td>
+                    </tr>
+                    <tr>
+                        <td><code>new_v7</code></td>
+                        <td>Generate timestamp UUID v7 as byte array</td>
+                    </tr>
+                    <tr>
+                        <td><code>new_v7_string</code></td>
+                        <td>Generate timestamp UUID v7 as hyphenated string</td>
+                    </tr>
+                    <tr>
+                        <td><code>new_v7_compact</code></td>
+                        <td>Generate timestamp UUID v7 without hyphens</td>
+                    </tr>
+                    <tr>
+                        <td><code>from_string (a_string)</code></td>
+                        <td>Parse UUID string to byte array</td>
+                    </tr>
+                    <tr>
+                        <td><code>to_string (a_uuid)</code></td>
+                        <td>Format byte array as hyphenated string</td>
+                    </tr>
+                    <tr>
+                        <td><code>is_valid_uuid (a_string)</code></td>
+                        <td>Validate hyphenated UUID format</td>
+                    </tr>
+                    <tr>
+                        <td><code>version (a_uuid)</code></td>
+                        <td>Get version number from UUID bytes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><a href="api/simple_uuid.html">View complete API reference &rarr;</a></p>
+        </section>
+
+        <section id="when-to-use">
+            <h2>When to Use Each Version</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Use Case</th>
+                        <th>Recommended</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Database primary keys</td>
+                        <td><strong>UUID v7</strong></td>
+                        <td>Sortable, reduces index fragmentation</td>
+                    </tr>
+                    <tr>
+                        <td>Session tokens</td>
+                        <td><strong>UUID v4</strong></td>
+                        <td>Maximum randomness, no timestamp leakage</td>
+                    </tr>
+                    <tr>
+                        <td>Distributed systems</td>
+                        <td><strong>UUID v7</strong></td>
+                        <td>Time-ordered, good for event sourcing</td>
+                    </tr>
+                    <tr>
+                        <td>Security tokens</td>
+                        <td><strong>UUID v4</strong></td>
+                        <td>Unpredictable, no information leakage</td>
+                    </tr>
+                    <tr>
+                        <td>Log correlation IDs</td>
+                        <td><strong>UUID v7</strong></td>
+                        <td>Sortable by time for log analysis</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="testing">
+            <h2>Testing</h2>
+            <p>
+                The library includes a comprehensive test suite with <strong>28 tests</strong> covering:
+            </p>
+            <ul>
+                <li>UUID v4 generation (length, version, variant, uniqueness)</li>
+                <li>UUID v7 generation (length, version, variant, sortability)</li>
+                <li>String formatting (hyphenated and compact)</li>
+                <li>Parsing and roundtrip conversion</li>
+                <li>Validation of valid and invalid inputs</li>
+                <li>Nil UUID handling</li>
+            </ul>
+<pre><code><span class="comment">-- Run tests</span>
+ec.exe -batch -config simple_uuid.ecf -target simple_uuid_tests -tests</code></pre>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            <strong>simple_uuid</strong> is part of the
+            <a href="https://github.com/ljr1981">simple_*</a> ecosystem
+        </p>
+        <p class="copyright">
+            Copyright &copy; 2024-2025 Larry Rix. MIT License.
+        </p>
+    </footer>
+</body>
+</html>
