@@ -4,7 +4,7 @@
 
 # simple_uuid
 
-**[Documentation](https://ljr1981.github.io/simple_uuid/)** | **[Watch the Build Video](https://youtu.be/zZmpyOlztK8)**
+**[Documentation](https://simple-eiffel.github.io/simple_uuid/)** | **[Watch the Build Video](https://youtu.be/zZmpyOlztK8)**
 
 Lightweight UUID generation library for Eiffel.
 
