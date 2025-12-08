@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="generator" content="ISE EiffelStudio version 25.02.9.8732 - win64">
+<meta name="description" content="TTSimple UUID - Lightweight UUID generation for Eiffel.  TTSupports: TT- UUID v4 (random) - 122 random bits, most common format TT- UUID v5 (namespace SHA-1) - Deterministic, name-based UUID TT- UUID v7 (timestamp) - Sortable, millisecond precision timestamp  TTUUID Format: xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx TT- M = version (4, 5, or 7) TT- N = variant (8, 9, a, or b for RFC 4122)  TTSecurity Note: TTThis implementation uses Eiffel's RANDOM class which is NOT cryptographically TTsecure. The PRNG is seeded with multiple entropy sources (time, date, TTinstance counter) to improve uniqueness, but this is NOT suitable for TTsecurity-sensitive applications like session tokens or cryptographic keys.  TTFor security-critical UUIDs, consider: TT- Using operating system's secure random (/dev/urandom, CryptGenRandom) TT- Using a cryptographically secure PRNG library  TTFor general purpose identifiers (database keys, correlation IDs, etc.), TTthis implementation provides sufficient randomness and uniqueness.  TTUsage: TTTcreate gen.make TTTid := gen.new_v4           -- Random UUID TTTid := gen.new_v7           -- Timestamp-based UUID TTTid := gen.new_v4_string    -- As string directly"/>
+<meta name="author" content="Larry Rix"/>
+<meta name="eis" content="name=Documentation, src=../docs/index.html, protocol=URI, tag=documentation"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="copyright" content="Copyright (c) 2024-2025, Larry Rix"/>
+<meta name="license" content="MIT License"/>
+<meta name="keywords" content="Eiffel class"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+<title>simple_uuid Contracts</title>
+<link rel="stylesheet" href="../default.css" type="text/css">
+<script type="text/javascript" src="../goto.html"></script>
+</head>
+<body>
+<pre></pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<a class="nav class" href="simple_uuid_chart.html">Chart</a>
+<a class="nav class" href="simple_uuid_links.html">Relations</a>
+<span class="nav class selected">Contracts</span>
+<span class="nav class goto">Go to: <input name="c" value="simple_uuid"></span>
+</div></form><pre><span class="ekeyword">note</span>
+	<span class="eitag">description</span><span class="esymbol">:</span> <span class="estring">&quot;</span><span class="estring">[</span>
+		<span class="estring">		Simple UUID - Lightweight UUID generation for Eiffel.</span>
+		
+		<span class="estring">		Supports:</span>
+		<span class="estring">		- UUID v4 (random) - 122 random bits, most common format</span>
+		<span class="estring">		- UUID v5 (namespace SHA-1) - Deterministic, name-based UUID</span>
+		<span class="estring">		- UUID v7 (timestamp) - Sortable, millisecond precision timestamp</span>
+		
+		<span class="estring">		UUID Format: xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx</span>
+		<span class="estring">		- M = version (4, 5, or 7)</span>
+		<span class="estring">		- N = variant (8, 9, a, or b for RFC 4122)</span>
+		
+		<span class="estring">		Security Note:</span>
+		<span class="estring">		This implementation uses Eiffel's RANDOM class which is NOT cryptographically</span>
+		<span class="estring">		secure. The PRNG is seeded with multiple entropy sources (time, date,</span>
+		<span class="estring">		instance counter) to improve uniqueness, but this is NOT suitable for</span>
+		<span class="estring">		security-sensitive applications like session tokens or cryptographic keys.</span>
+		
+		<span class="estring">		For security-critical UUIDs, consider:</span>
+		<span class="estring">		- Using operating system's secure random (/dev/urandom, CryptGenRandom)</span>
+		<span class="estring">		- Using a cryptographically secure PRNG library</span>
+		
+		<span class="estring">		For general purpose identifiers (database keys, correlation IDs, etc.),</span>
+		<span class="estring">		this implementation provides sufficient randomness and uniqueness.</span>
+		
+		<span class="estring">		Usage:</span>
+		<span class="estring">			create gen.make</span>
+		<span class="estring">			id := gen.new_v4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Random UUID</span>
+		<span class="estring">			id := gen.new_v7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Timestamp-based UUID</span>
+		<span class="estring">			id := gen.new_v4_string &nbsp;&nbsp;&nbsp;-- As string directly</span>
+	<span class="estring">]</span><span class="estring">&quot;</span>
+	<span class="eitag">author</span><span class="esymbol">:</span> <span class="estring">&quot;Larry Rix&quot;</span>
+	<span class="eitag">date</span><span class="esymbol">:</span> <span class="estring">&quot;$Date$&quot;</span>
+	<span class="eitag">revision</span><span class="esymbol">:</span> <span class="estring">&quot;$Revision$&quot;</span>
+	<span class="eitag">eis</span><span class="esymbol">:</span> <span class="estring">&quot;name=Documentation&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;src=../docs/index.html&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;protocol=URI&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;tag=documentation&quot;</span>
+	<span class="eitag">eis</span><span class="esymbol">:</span> <span class="estring">&quot;name=API Reference&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;src=../docs/api/simple_uuid.html&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;protocol=URI&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;tag=api&quot;</span>
+	<span class="eitag">eis</span><span class="esymbol">:</span> <span class="estring">&quot;name=RFC 9562&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;src=</span><a class="estring" href="https://datatracker.ietf.org/doc/html/rfc9562">https://datatracker.ietf.org/doc/html/rfc9562</a><span class="estring">&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;protocol=URI&quot;</span><span class="esymbol">,</span> <span class="estring">&quot;tag=specification&quot;</span>
+
+<span class="ekeyword">class</span> <span class="ekeyword">interface</span>
+	<a class="eclass" href="../src/simple_uuid_short.html">SIMPLE_UUID</a>
+
+<span class="ekeyword">create</span> 
+	<a class="efeature" href="../src/simple_uuid_short.html#f_make">make</a>
+
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> UUID v4 (Random)</span>
+
+	<a name="f_new_v4"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v4">new_v4</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new random UUID v4 (122 random bits).</span>
+			<span class="ecomment">--</span><span class="ecomment"> Format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</span>
+			<span class="ecomment">--</span><span class="ecomment"> where y is 8, 9, a, or b</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">version_4</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">7</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">240</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">64</span>
+			<span class="etag">variant_rfc4122</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">9</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">192</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">128</span>
+
+	<a name="f_new_v4_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v4_string">new_v4_string</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new random UUID v4 as hyphenated string.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_format</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">36</span>
+
+	<a name="f_new_v4_compact"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v4_compact">new_v4_compact</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new random UUID v4 without hyphens.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">no_hyphens</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_has">has</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="echar">'-'</span><span class="esymbol">)</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">32</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> UUID v5 (Namespace SHA-1)</span>
+
+	<a name="f_new_v5"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v5">new_v5</a> <span class="esymbol">(</span><span class="elocal">a_namespace</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">;</span> <span class="elocal">a_name</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a deterministic UUID v5 from </span><span class="equoted">a_namespace</span><span class="ecomment"> and </span><span class="equoted">a_name</span><span class="ecomment">.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Uses SHA-1 hash of namespace + name.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Same namespace + name always produces same UUID.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_namespace</span><span class="esymbol">:</span> <span class="elocal">a_namespace</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">name_not_void</span><span class="esymbol">:</span> <span class="elocal">a_name</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">version_5</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">7</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">240</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">80</span>
+			<span class="etag">variant_rfc4122</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">9</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">192</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">128</span>
+
+	<a name="f_new_v5_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v5_string">new_v5_string</a> <span class="esymbol">(</span><span class="elocal">a_namespace</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">;</span> <span class="elocal">a_name</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a deterministic UUID v5 as hyphenated string.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_namespace</span><span class="esymbol">:</span> <span class="elocal">a_namespace</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">name_not_void</span><span class="esymbol">:</span> <span class="elocal">a_name</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_format</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">36</span>
+
+	<a name="f_new_v5_dns"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v5_dns">new_v5_dns</a> <span class="esymbol">(</span><span class="elocal">a_domain</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate UUID v5 using DNS namespace for </span><span class="equoted">a_domain</span><span class="ecomment">.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Example: new_v5_dns(&quot;</span><a class="ecomment" href="www.example.com">www.example.com</a><span class="ecomment">&quot;)</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">domain_not_void</span><span class="esymbol">:</span> <span class="elocal">a_domain</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+			<span class="etag">domain_not_empty</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="elocal">a_domain</span><span class="edot">.</span><a class="efeature" href="../base/finite_short.html#f_is_empty">is_empty</a>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_format</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+
+	<a name="f_new_v5_url"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v5_url">new_v5_url</a> <span class="esymbol">(</span><span class="elocal">a_url</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate UUID v5 using URL namespace for </span><span class="equoted">a_url</span><span class="ecomment">.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Example: new_v5_url(&quot;</span><a class="ecomment" href="https://www.example.com/page">https://www.example.com/page</a><span class="ecomment">&quot;)</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">url_not_void</span><span class="esymbol">:</span> <span class="elocal">a_url</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+			<span class="etag">url_not_empty</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="elocal">a_url</span><span class="edot">.</span><a class="efeature" href="../base/finite_short.html#f_is_empty">is_empty</a>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_format</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Namespace UUIDs (RFC 4122)</span>
+
+	<a name="f_namespace_dns"></a><a class="efeature" href="../src/simple_uuid_short.html#f_namespace_dns">Namespace_dns</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Namespace UUID for DNS names.</span>
+			<span class="ecomment">--</span><span class="ecomment"> 6ba7b810-9dad-11d1-80b4-00c04fd430c8</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+
+	<a name="f_namespace_url"></a><a class="efeature" href="../src/simple_uuid_short.html#f_namespace_url">Namespace_url</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Namespace UUID for URLs.</span>
+			<span class="ecomment">--</span><span class="ecomment"> 6ba7b811-9dad-11d1-80b4-00c04fd430c8</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+
+	<a name="f_namespace_oid"></a><a class="efeature" href="../src/simple_uuid_short.html#f_namespace_oid">Namespace_oid</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Namespace UUID for ISO OIDs.</span>
+			<span class="ecomment">--</span><span class="ecomment"> 6ba7b812-9dad-11d1-80b4-00c04fd430c8</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+
+	<a name="f_namespace_x500"></a><a class="efeature" href="../src/simple_uuid_short.html#f_namespace_x500">Namespace_x500</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Namespace UUID for X.500 DNs.</span>
+			<span class="ecomment">--</span><span class="ecomment"> 6ba7b814-9dad-11d1-80b4-00c04fd430c8</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> UUID v7 (Timestamp)</span>
+
+	<a name="f_new_v7"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v7">new_v7</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new timestamp-based UUID v7 with monotonicity guarantee.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Format: tttttttt-tttt-7xxx-yxxx-xxxxxxxxxxxx</span>
+			<span class="ecomment">--</span><span class="ecomment"> First 48 bits are Unix milliseconds timestamp.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Includes sequence counter for UUIDs generated in same millisecond.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Sortable by creation time.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">version_7</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">7</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">240</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">112</span>
+			<span class="etag">variant_rfc4122</span><span class="esymbol">:</span> <span class="esymbol">(</span><span class="ekeyword">Result</span> <a class="esymbol" href="../base/array_short.html#f_item">[</a><span class="enumber">9</span><a class="esymbol" href="../base/array_short.html#f_item">]</a> <a class="esymbol" href="../base/natural_8_short.html#f_bit_and">&#38;</a> <span class="enumber">192</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">128</span>
+
+	<a name="f_new_v7_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v7_string">new_v7_string</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new timestamp-based UUID v7 as string.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_format</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">36</span>
+
+	<a name="f_new_v7_compact"></a><a class="efeature" href="../src/simple_uuid_short.html#f_new_v7_compact">new_v7_compact</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Generate a new timestamp-based UUID v7 without hyphens.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">no_hyphens</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_has">has</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="echar">'-'</span><span class="esymbol">)</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">32</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Formatting</span>
+
+	<a name="f_to_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_to_string">to_string</a> <span class="esymbol">(</span><span class="elocal">a_uuid</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Convert UUID bytes to hyphenated string.</span>
+			<span class="ecomment">--</span><span class="ecomment"> Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <span class="elocal">a_uuid</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_format</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">36</span>
+			<span class="etag">has_hyphens</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_occurrences">occurrences</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="echar">'-'</span><span class="esymbol">)</span> <span class="esymbol">=</span> <span class="enumber">4</span>
+
+	<a name="f_to_compact_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_to_compact_string">to_compact_string</a> <span class="esymbol">(</span><span class="elocal">a_uuid</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a>
+			<span class="ecomment">--</span><span class="ecomment"> Convert UUID bytes to string without hyphens.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <span class="elocal">a_uuid</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">32</span>
+			<span class="etag">no_hyphens</span><span class="esymbol">:</span> <a class="ekeyword" href="../base/boolean_short.html#f_negated">not</a> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/readable_string_8_short.html#f_has">has</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="echar">'-'</span><span class="esymbol">)</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Parsing</span>
+
+	<a name="f_from_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_from_string">from_string</a> <span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> Parse UUID from string (with or without hyphens).</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_input</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">)</span> <a class="ekeyword" href="../base/boolean_short.html#f_disjuncted">or</a> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid_compact">is_valid_uuid_compact</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">)</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Validation</span>
+
+	<a name="f_is_valid_uuid"></a><a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a> <span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_short.html">BOOLEAN</a>
+			<span class="ecomment">--</span><span class="ecomment"> Is </span><span class="equoted">a_string</span><span class="ecomment"> a valid hyphenated UUID?</span>
+			<span class="ecomment">--</span><span class="ecomment"> Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">string_not_void</span><span class="esymbol">:</span> <span class="elocal">a_string</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+
+	<a name="f_is_valid_uuid_compact"></a><a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid_compact">is_valid_uuid_compact</a> <span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_short.html">BOOLEAN</a>
+			<span class="ecomment">--</span><span class="ecomment"> Is </span><span class="equoted">a_string</span><span class="ecomment"> a valid compact UUID (no hyphens)?</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">string_not_void</span><span class="esymbol">:</span> <span class="elocal">a_string</span> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Comparison</span>
+
+	<a name="f_is_nil"></a><a class="efeature" href="../src/simple_uuid_short.html#f_is_nil">is_nil</a> <span class="esymbol">(</span><span class="elocal">a_uuid</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_short.html">BOOLEAN</a>
+			<span class="ecomment">--</span><span class="ecomment"> Is </span><span class="equoted">a_uuid</span><span class="ecomment"> the nil UUID (all zeros)?</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <span class="elocal">a_uuid</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+
+	<a name="f_is_max"></a><a class="efeature" href="../src/simple_uuid_short.html#f_is_max">is_max</a> <span class="esymbol">(</span><span class="elocal">a_uuid</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/boolean_short.html">BOOLEAN</a>
+			<span class="ecomment">--</span><span class="ecomment"> Is </span><span class="equoted">a_uuid</span><span class="ecomment"> the max UUID (all ones)?</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <span class="elocal">a_uuid</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+
+	<a name="f_nil_uuid"></a><a class="efeature" href="../src/simple_uuid_short.html#f_nil_uuid">nil_uuid</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> The nil UUID (all zeros).</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">is_nil</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_nil">is_nil</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+
+	<a name="f_max_uuid"></a><a class="efeature" href="../src/simple_uuid_short.html#f_max_uuid">max_uuid</a><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span>
+			<span class="ecomment">--</span><span class="ecomment"> The max UUID (all ones) per RFC 9562.</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">correct_length</span><span class="esymbol">:</span> <span class="ekeyword">Result</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+			<span class="etag">is_max</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_max">is_max</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="ekeyword">Result</span><span class="esymbol">)</span>
+
+	<a name="f_nil_uuid_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_nil_uuid_string">Nil_uuid_string</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a> <span class="esymbol">=</span> &quot;00000000-0000-0000-0000-000000000000&quot;
+			<span class="ecomment">--</span><span class="ecomment"> The nil UUID as string.</span>
+
+	<a name="f_max_uuid_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_max_uuid_string">Max_uuid_string</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a> <span class="esymbol">=</span> &quot;ffffffff-ffff-ffff-ffff-ffffffffffff&quot;
+			<span class="ecomment">--</span><span class="ecomment"> The max UUID as string (RFC 9562).</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Version Detection</span>
+
+	<a name="f_version"></a><a class="efeature" href="../src/simple_uuid_short.html#f_version">version</a> <span class="esymbol">(</span><span class="elocal">a_uuid</span><span class="esymbol">:</span> <a class="eclass" href="../base/array_short.html">ARRAY</a> <span class="esymbol">[</span><a class="eclass" href="../base/natural_8_short.html">NATURAL_8</a><span class="esymbol">]</span><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_short.html">INTEGER_32</a>
+			<span class="ecomment">--</span><span class="ecomment"> Get the version number of </span><span class="equoted">a_uuid</span><span class="ecomment">.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <span class="elocal">a_uuid</span><span class="edot">.</span><a class="efeature" href="../base/array_short.html#f_count">count</a> <span class="esymbol">=</span> <span class="enumber">16</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_version</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span> <a class="ekeyword" href="../base/boolean_short.html#f_conjuncted">and</a> <span class="ekeyword">Result</span> <a class="esymbol" href="../base/comparable_short.html#f_is_less_equal">&lt;=</a> <span class="enumber">15</span>
+
+	<a name="f_version_from_string"></a><a class="efeature" href="../src/simple_uuid_short.html#f_version_from_string">version_from_string</a> <span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a><span class="esymbol">)</span><span class="esymbol">:</span> <a class="eclass" href="../base/integer_32_short.html">INTEGER_32</a>
+			<span class="ecomment">--</span><span class="ecomment"> Get the version number from UUID string.</span>
+		<span class="ekeyword">require</span>
+			<span class="etag">valid_uuid</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid">is_valid_uuid</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">)</span> <a class="ekeyword" href="../base/boolean_short.html#f_disjuncted">or</a> <a class="efeature" href="../src/simple_uuid_short.html#f_is_valid_uuid_compact">is_valid_uuid_compact</a><span class="esymbol"> </span><span class="esymbol">(</span><span class="elocal">a_string</span><span class="esymbol">)</span>
+		<span class="ekeyword">ensure</span>
+			<span class="etag">valid_version</span><span class="esymbol">:</span> <span class="ekeyword">Result</span> <a class="esymbol" href="../base/comparable_short.html#f_is_greater_equal">&gt;=</a> <span class="enumber">0</span> <a class="ekeyword" href="../base/boolean_short.html#f_conjuncted">and</a> <span class="ekeyword">Result</span> <a class="esymbol" href="../base/comparable_short.html#f_is_less_equal">&lt;=</a> <span class="enumber">15</span>
+	
+<span class="ekeyword">feature</span> <span class="ecomment">--</span><span class="ecomment"> Constants</span>
+
+	<a name="f_hex_chars"></a><a class="efeature" href="../src/simple_uuid_short.html#f_hex_chars">Hex_chars</a><span class="esymbol">:</span> <a class="eclass" href="../base/string_8_short.html">STRING_8</a> <span class="esymbol">=</span> &quot;0123456789abcdef&quot;
+			<span class="ecomment">--</span><span class="ecomment"> Hexadecimal characters.</span>
+	
+<span class="ekeyword">invariant</span>
+	<span class="etag">random_exists</span><span class="esymbol">:</span> <a class="efeature" href="../src/simple_uuid_short.html#f_random">random</a> <span class="esymbol">/=</span> <span class="ekeyword">Void</span>
+
+<span class="ekeyword">note</span>
+	<span class="eitag">copyright</span><span class="esymbol">:</span> <span class="estring">&quot;Copyright (c) 2024-2025, Larry Rix&quot;</span>
+	<span class="eitag">license</span><span class="esymbol">:</span> <span class="estring">&quot;MIT License&quot;</span>
+
+<span class="ekeyword">end</span> <span class="ecomment">--</span> <span class="ecomment">class </span><a class="eclass" href="../src/simple_uuid_short.html">SIMPLE_UUID</a></pre><form class="nav" onsubmit="go_to('../',this.c.value);return false;">
+<div class="nav">
+<a class="nav hierarchy" href="../class_list.html">Classes</a>
+<a class="nav hierarchy" href="../cluster_list.html">Clusters</a>
+<a class="nav hierarchy" href="../cluster_hierarchy.html">Cluster hierarchy</a>
+<a class="nav class" href="simple_uuid_chart.html">Chart</a>
+<a class="nav class" href="simple_uuid_links.html">Relations</a>
+<span class="nav class selected">Contracts</span>
+<span class="nav class goto">Go to: <input name="c" value="simple_uuid"></span>
+</div></form><pre></pre>
+<p style="text-align:center;">Generated by <a href="http://www.eiffel.com">ISE EiffelStudio</a></p>
+</body>
+</html>
+
