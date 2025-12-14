@@ -70,8 +70,8 @@ feature {NONE} -- Initialization
 			l_entropy := l_entropy.bit_xor (l_time.seconds.to_integer_64)
 
 			-- Add invocation counter for instances created in same millisecond
-			instance_counter := instance_counter + 1
-			l_entropy := l_entropy.bit_xor ((instance_counter.to_integer_64 |<< 16))
+			shared_counter.put (shared_counter.item + 1)
+			l_entropy := l_entropy.bit_xor ((shared_counter.item.to_integer_64 |<< 16))
 
 			-- Reduce to positive INTEGER seed
 			l_seed := (l_entropy.bit_xor (l_entropy |>> 32)).to_integer_32.abs
@@ -568,8 +568,11 @@ feature {NONE} -- Implementation
 			-- Random number generator.
 			-- Note: This is Eiffel's standard PRNG, not cryptographically secure.
 
-	instance_counter: INTEGER_32
-			-- Counter for instances created, adds entropy for same-time creation.
+	shared_counter: CELL [INTEGER_32]
+			-- Shared counter across all instances for entropy in same-millisecond creation.
+		once
+			create Result.put (0)
+		end
 
 	last_v7_timestamp: NATURAL_64
 			-- Last timestamp used for v7 UUID generation.
