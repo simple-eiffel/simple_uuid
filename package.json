@@ -1,0 +1,9 @@
+{
+  "name": "simple_uuid",
+  "version": "0.1.0",
+  "description": "Simple UUID Library - UUID v4 and v7 generation with clean API",
+  "author": "Larry Rix",
+  "license": "MIT",
+  "category": "utilities",
+  "keywords": ["uuid", "guid", "unique", "identifier"]
+}
