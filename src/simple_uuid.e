@@ -48,28 +48,21 @@ feature {NONE} -- Initialization
 	make
 			-- Initialize the UUID generator with enhanced entropy seeding.
 		local
-			l_time: TIME
-			l_date: DATE_TIME
+			l_dt: SIMPLE_DATE_TIME
 			l_seed: INTEGER
 			l_entropy: INTEGER_64
 		do
-			-- Gather entropy from multiple sources
-			create l_time.make_now
-			create l_date.make_now_utc
+			-- Gather entropy from timestamp (seconds since epoch)
+			create l_dt.make_now
+			l_entropy := l_dt.to_timestamp
 
-			-- Start with time-based entropy
-			l_entropy := l_time.hour.to_integer_64 * 3600000 +
-						 l_time.minute * 60000 +
-						 l_time.second * 1000 +
-						 l_time.milli_second
+			-- Add time-of-day variation
+			l_entropy := l_entropy.bit_xor ((l_dt.time.hour * 3600 + l_dt.time.minute * 60 + l_dt.time.second).to_integer_64)
 
-			-- Add date component
-			l_entropy := l_entropy.bit_xor ((l_date.day * 100 + l_date.month).to_integer_64)
+			-- Add date component for more entropy
+			l_entropy := l_entropy.bit_xor ((l_dt.date.day * 100 + l_dt.date.month).to_integer_64)
 
-			-- XOR with seconds since epoch for more variation
-			l_entropy := l_entropy.bit_xor (l_time.seconds.to_integer_64)
-
-			-- Add invocation counter for instances created in same millisecond
+			-- Add invocation counter for instances created in same second
 			shared_counter.put (shared_counter.item + 1)
 			l_entropy := l_entropy.bit_xor ((shared_counter.item.to_integer_64 |<< 16))
 
@@ -593,18 +586,13 @@ feature {NONE} -- Implementation
 	unix_milliseconds: NATURAL_64
 			-- Current Unix timestamp in milliseconds.
 		local
-			l_date: DATE_TIME
-			l_epoch: DATE_TIME
-			l_duration: DATE_TIME_DURATION
+			l_now: SIMPLE_DATE_TIME
 		do
-			create l_date.make_now_utc
-			create l_epoch.make (1970, 1, 1, 0, 0, 0)
-			l_duration := l_date.relative_duration (l_epoch)
-			Result := (l_duration.seconds_count * 1000 + l_date.time.milli_second).to_natural_64
+			create l_now.make_now
+			Result := (l_now.to_timestamp * 1000).to_natural_64
 		ensure
 			positive_timestamp: Result > 0
 		end
-
 	byte_to_hex (a_byte: NATURAL_8): STRING
 			-- Convert byte to 2-character hex string.
 		do
