@@ -1,13 +1,26 @@
-# EiffelStudio generated files
+# Eiffel build artifacts
 EIFGENs/
+Documentation/
+
+# Compiled files
+*.melted
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
 
 # Backup files
+*.swp
 *.bak
 *~
 
-# Windows
-Thumbs.db
-desktop.ini
+# IDE files
+.vscode/
+.idea/
 
-# macOS
+# OS files
 .DS_Store
+Thumbs.db
+
