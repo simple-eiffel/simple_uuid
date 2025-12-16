@@ -21,12 +21,12 @@ Lightweight UUID generation library for Eiffel.
 Add to your ECF:
 
 ```xml
-<library name="simple_uuid" location="$SIMPLE_UUID\simple_uuid.ecf"/>
+<library name="simple_uuid" location="$SIMPLE_EIFFEL/simple_uuid/simple_uuid.ecf"/>
 ```
 
-Set environment variable:
+Set environment variable (one-time setup for all simple_* libraries):
 ```
-SIMPLE_UUID=D:\prod\simple_uuid
+SIMPLE_EIFFEL=D:\prod
 ```
 
 ## Usage
