@@ -75,7 +75,7 @@ feature {NONE} -- Initialization
 			create random.set_seed (l_seed)
 
 			-- Prime the generator with multiple rounds
-			across 1 |..| 10 as i loop
+			across 1 |..| 10 as ic loop
 				random.forth
 			end
 
@@ -96,8 +96,8 @@ feature -- UUID v4 (Random)
 			create Result.make_filled (0, 1, 16)
 
 			-- Fill with random bytes
-			across 1 |..| 16 as i loop
-				Result [i.item] := random_byte
+			across 1 |..| 16 as ic loop
+				Result [ic.item] := random_byte
 			end
 
 			-- Set version to 4 (0100 in high nibble of byte 7)
@@ -318,8 +318,8 @@ feature -- UUID v7 (Timestamp)
 			Result [8] := l_seq_low
 
 			-- Remaining bytes 9-16 are random
-			across 9 |..| 16 as idx loop
-				Result [idx.item] := random_byte
+			across 9 |..| 16 as ic loop
+				Result [ic.item] := random_byte
 			end
 
 			-- Set variant to RFC 4122 (10xx in high bits of byte 9)
@@ -398,8 +398,8 @@ feature -- Formatting
 			valid_uuid: a_uuid.count = 16
 		do
 			create Result.make (32)
-			across a_uuid as b loop
-				Result.append (byte_to_hex (b.item))
+			across a_uuid as ic_b loop
+				Result.append (byte_to_hex (ic_b.item))
 			end
 		ensure
 			correct_length: Result.count = 32
@@ -498,7 +498,7 @@ feature -- Comparison
 		require
 			valid_uuid: a_uuid.count = 16
 		do
-			Result := across a_uuid as b all b.item = 0 end
+			Result := across a_uuid as ic_b all ic_b.item = 0 end
 		end
 
 	is_max (a_uuid: ARRAY [NATURAL_8]): BOOLEAN
@@ -506,7 +506,7 @@ feature -- Comparison
 		require
 			valid_uuid: a_uuid.count = 16
 		do
-			Result := across a_uuid as b all b.item = 0xFF end
+			Result := across a_uuid as ic_b all ic_b.item = 0xFF end
 		end
 
 	nil_uuid: ARRAY [NATURAL_8]
@@ -735,8 +735,8 @@ feature {NONE} -- SHA-1 Implementation (for UUID v5)
 			create l_result.make (l_padded_len)
 
 			-- Copy original message
-			across a_message as b loop
-				l_result.extend (b.item)
+			across a_message as ic_b loop
+				l_result.extend (ic_b.item)
 			end
 
 			-- Append bit '1' (0x80)
