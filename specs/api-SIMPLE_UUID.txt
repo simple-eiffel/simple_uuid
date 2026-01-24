@@ -1,0 +1,483 @@
+Eiffel Compilation Manager
+Version 25.02.9.8732 - win64
+
+Degree 6: Examining System
+System Recompiled.
+note
+	description: "[
+				Simple UUID - Lightweight UUID generation for Eiffel.
+		
+				Supports:
+				- UUID v4 (random) - 122 random bits, most common format
+				- UUID v5 (namespace SHA-1) - Deterministic, name-based UUID
+				- UUID v7 (timestamp) - Sortable, millisecond precision timestamp
+		
+				UUID Format: xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx
+				- M = version (4, 5, or 7)
+				- N = variant (8, 9, a, or b for RFC 4122)
+		
+				Security Note:
+				This implementation uses Eiffel's RANDOM class which is NOT cryptographically
+				secure. The PRNG is seeded with multiple entropy sources (time, date,
+				instance counter) to improve uniqueness, but this is NOT suitable for
+				security-sensitive applications like session tokens or cryptographic keys.
+		
+				For security-critical UUIDs, consider:
+				- Using operating system's secure random (/dev/urandom, CryptGenRandom)
+				- Using a cryptographically secure PRNG library
+		
+				For general purpose identifiers (database keys, correlation IDs, etc.),
+				this implementation provides sufficient randomness and uniqueness.
+		
+				Usage:
+					create gen.make
+					id := gen.new_v4           -- Random UUID
+					id := gen.new_v7           -- Timestamp-based UUID
+					id := gen.new_v4_string    -- As string directly
+	]"
+	author: "Larry Rix"
+	date: "$Date$"
+	revision: "$Revision$"
+	eis: "name=Documentation", "src=../docs/index.html", "protocol=URI", "tag=documentation"
+	eis: "name=API Reference", "src=../docs/api/simple_uuid.html", "protocol=URI", "tag=api"
+	eis: "name=RFC 9562", "src=https://datatracker.ietf.org/doc/html/rfc9562", "protocol=URI", "tag=specification"
+
+class interface
+	SIMPLE_UUID
+
+create 
+	make
+			-- Initialize the UUID generator with enhanced entropy seeding.
+		ensure
+			random_created: random /= Void
+
+feature -- Access
+
+	generating_type: TYPE [detachable SIMPLE_UUID]
+			-- Type of current object
+			-- (type of which it is a direct instance)
+			-- (from ANY)
+		ensure -- from ANY
+			generating_type_not_void: Result /= Void
+
+	generator: STRING_8
+			-- Name of current object's generating class
+			-- (base class of the type of which it is a direct instance)
+			-- (from ANY)
+		ensure -- from ANY
+			generator_not_void: Result /= Void
+			generator_not_empty: not Result.is_empty
+	
+feature -- Comparison
+
+	frozen deep_equal (a: detachable ANY; b: like arg #1): BOOLEAN
+			-- Are `a` and `b` either both void
+			-- or attached to isomorphic object structures?
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+			shallow_implies_deep: standard_equal (a, b) implies Result
+			both_or_none_void: (a = Void) implies (Result = (b = Void))
+			same_type: (Result and (a /= Void)) implies (b /= Void and then a.same_type (b))
+			symmetric: Result implies deep_equal (b, a)
+
+	frozen equal (a: detachable ANY; b: like arg #1): BOOLEAN
+			-- Are `a` and `b` either both void or attached
+			-- to objects considered equal?
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+			definition: Result = (a = Void and b = Void) or else ((a /= Void and b /= Void) and then a.is_equal (b))
+
+	frozen is_deep_equal alias "נננ" (other: SIMPLE_UUID): BOOLEAN
+			-- Are `Current` and `other` attached to isomorphic object structures?
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+		ensure -- from ANY
+			shallow_implies_deep: standard_is_equal (other) implies Result
+			same_type: Result implies same_type (other)
+			symmetric: Result implies other.is_deep_equal (Current)
+
+	is_equal (other: SIMPLE_UUID): BOOLEAN
+			-- Is `other` attached to an object considered
+			-- equal to current object?
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+		ensure -- from ANY
+			symmetric: Result implies other ~ Current
+			consistent: standard_is_equal (other) implies Result
+
+	is_max (a_uuid: ARRAY [NATURAL_8]): BOOLEAN
+			-- Is `a_uuid` the max UUID (all ones)?
+		require
+			valid_uuid: a_uuid.count = 16
+
+	is_nil (a_uuid: ARRAY [NATURAL_8]): BOOLEAN
+			-- Is `a_uuid` the nil UUID (all zeros)?
+		require
+			valid_uuid: a_uuid.count = 16
+
+	max_uuid: ARRAY [NATURAL_8]
+			-- The max UUID (all ones) per RFC 9562.
+		ensure
+			correct_length: Result.count = 16
+			is_max: is_max (Result)
+
+	Max_uuid_string: STRING_8 = "ffffffff-ffff-ffff-ffff-ffffffffffff"
+			-- The max UUID as string (RFC 9562).
+
+	nil_uuid: ARRAY [NATURAL_8]
+			-- The nil UUID (all zeros).
+		ensure
+			correct_length: Result.count = 16
+			is_nil: is_nil (Result)
+
+	Nil_uuid_string: STRING_8 = "00000000-0000-0000-0000-000000000000"
+			-- The nil UUID as string.
+
+	frozen standard_equal (a: detachable ANY; b: like arg #1): BOOLEAN
+			-- Are `a` and `b` either both void or attached to
+			-- field-by-field identical objects of the same type?
+			-- Always uses default object comparison criterion.
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+			definition: Result = (a = Void and b = Void) or else ((a /= Void and b /= Void) and then a.standard_is_equal (b))
+
+	frozen standard_is_equal alias "?" (other: SIMPLE_UUID): BOOLEAN
+			-- Is `other` attached to an object of the same type
+			-- as current object, and field-by-field identical to it?
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+		ensure -- from ANY
+			same_type: Result implies same_type (other)
+			symmetric: Result implies other.standard_is_equal (Current)
+	
+feature -- Status report
+
+	conforms_to (other: ANY): BOOLEAN
+			-- Does type of current object conform to type
+			-- of `other` (as per Eiffel: The Language, chapter 13)?
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+
+	same_type (other: ANY): BOOLEAN
+			-- Is type of current object identical to type of `other`?
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+		ensure -- from ANY
+			definition: Result = (conforms_to (other) and other.conforms_to (Current))
+	
+feature -- Duplication
+
+	copy (other: SIMPLE_UUID)
+			-- Update current object using fields of object attached
+			-- to `other`, so as to yield equal objects.
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+			type_identity: same_type (other)
+		ensure -- from ANY
+			is_equal: Current ~ other
+
+	frozen deep_copy (other: SIMPLE_UUID)
+			-- Effect equivalent to that of:
+			--		`copy` (`other` . `deep_twin`)
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+		ensure -- from ANY
+			deep_equal: deep_equal (Current, other)
+
+	frozen deep_twin: SIMPLE_UUID
+			-- New object structure recursively duplicated from Current.
+			-- (from ANY)
+		ensure -- from ANY
+			deep_twin_not_void: Result /= Void
+			deep_equal: deep_equal (Current, Result)
+
+	frozen standard_copy (other: SIMPLE_UUID)
+			-- Copy every field of `other` onto corresponding field
+			-- of current object.
+			-- (from ANY)
+		require -- from ANY
+			other_not_void: other /= Void
+			type_identity: same_type (other)
+		ensure -- from ANY
+			is_standard_equal: standard_is_equal (other)
+
+	frozen standard_twin: SIMPLE_UUID
+			-- New object field-by-field identical to `other`.
+			-- Always uses default copying semantics.
+			-- (from ANY)
+		ensure -- from ANY
+			standard_twin_not_void: Result /= Void
+			equal: standard_equal (Result, Current)
+
+	frozen twin: SIMPLE_UUID
+			-- New object equal to `Current`
+			-- `twin` calls `copy`; to change copying/twinning semantics, redefine `copy`.
+			-- (from ANY)
+		ensure -- from ANY
+			twin_not_void: Result /= Void
+			is_equal: Result ~ Current
+	
+feature -- Basic operations
+
+	frozen default: detachable SIMPLE_UUID
+			-- Default value of object's type
+			-- (from ANY)
+
+	frozen default_pointer: POINTER
+			-- Default value of type `POINTER`
+			-- (Avoid the need to write `p`.`default` for
+			-- some `p` of type `POINTER`.)
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+
+	default_rescue
+			-- Process exception for routines with no Rescue clause.
+			-- (Default: do nothing.)
+			-- (from ANY)
+
+	frozen do_nothing
+			-- Execute a null action.
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+	
+feature -- Constants
+
+	Hex_chars: STRING_8 = "0123456789abcdef"
+			-- Hexadecimal characters.
+	
+feature -- Formatting
+
+	to_compact_string (a_uuid: ARRAY [NATURAL_8]): STRING_8
+			-- Convert UUID bytes to string without hyphens.
+		require
+			valid_uuid: a_uuid.count = 16
+		ensure
+			correct_length: Result.count = 32
+			no_hyphens: not Result.has ('-')
+
+	to_string (a_uuid: ARRAY [NATURAL_8]): STRING_8
+			-- Convert UUID bytes to hyphenated string.
+			-- Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+		require
+			valid_uuid: a_uuid.count = 16
+		ensure
+			correct_format: Result.count = 36
+			has_hyphens: Result.occurrences ('-') = 4
+	
+feature -- Namespace UUIDs (RFC 4122)
+
+	Namespace_dns: ARRAY [NATURAL_8]
+			-- Namespace UUID for DNS names.
+			-- 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+		ensure
+			correct_length: Result.count = 16
+
+	Namespace_oid: ARRAY [NATURAL_8]
+			-- Namespace UUID for ISO OIDs.
+			-- 6ba7b812-9dad-11d1-80b4-00c04fd430c8
+		ensure
+			correct_length: Result.count = 16
+
+	Namespace_url: ARRAY [NATURAL_8]
+			-- Namespace UUID for URLs.
+			-- 6ba7b811-9dad-11d1-80b4-00c04fd430c8
+		ensure
+			correct_length: Result.count = 16
+
+	Namespace_x500: ARRAY [NATURAL_8]
+			-- Namespace UUID for X.500 DNs.
+			-- 6ba7b814-9dad-11d1-80b4-00c04fd430c8
+		ensure
+			correct_length: Result.count = 16
+	
+feature -- Output
+
+	Io: STD_FILES
+			-- Handle to standard file setup
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+			io_not_void: Result /= Void
+
+	out: STRING_8
+			-- New string containing terse printable representation
+			-- of current object
+			-- (from ANY)
+		ensure -- from ANY
+			out_not_void: Result /= Void
+
+	print (o: detachable ANY)
+			-- Write terse external representation of `o`
+			-- on standard output.
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+
+	frozen tagged_out: STRING_8
+			-- New string containing terse printable representation
+			-- of current object
+			-- (from ANY)
+		ensure -- from ANY
+			tagged_out_not_void: Result /= Void
+	
+feature -- Parsing
+
+	from_string (a_string: STRING_8): ARRAY [NATURAL_8]
+			-- Parse UUID from string (with or without hyphens).
+		require
+			valid_input: is_valid_uuid (a_string) or is_valid_uuid_compact (a_string)
+		ensure
+			correct_length: Result.count = 16
+	
+feature -- Platform
+
+	Operating_environment: OPERATING_ENVIRONMENT
+			-- Objects available from the operating system
+			-- (from ANY)
+		ensure -- from ANY
+			instance_free: class
+			operating_environment_not_void: Result /= Void
+	
+feature -- UUID v4 (Random)
+
+	new_v4: ARRAY [NATURAL_8]
+			-- Generate a new random UUID v4 (122 random bits).
+			-- Format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+			-- where y is 8, 9, a, or b
+		ensure
+			correct_length: Result.count = 16
+			version_4: (Result [7] & 240) = 64
+			variant_rfc4122: (Result [9] & 192) = 128
+
+	new_v4_compact: STRING_8
+			-- Generate a new random UUID v4 without hyphens.
+		ensure
+			no_hyphens: not Result.has ('-')
+			correct_length: Result.count = 32
+
+	new_v4_string: STRING_8
+			-- Generate a new random UUID v4 as hyphenated string.
+		ensure
+			valid_format: is_valid_uuid (Result)
+			correct_length: Result.count = 36
+	
+feature -- UUID v5 (Namespace SHA-1)
+
+	new_v5 (a_namespace: ARRAY [NATURAL_8]; a_name: STRING_8): ARRAY [NATURAL_8]
+			-- Generate a deterministic UUID v5 from `a_namespace` and `a_name`.
+			-- Uses SHA-1 hash of namespace + name.
+			-- Same namespace + name always produces same UUID.
+		require
+			valid_namespace: a_namespace.count = 16
+			name_not_void: a_name /= Void
+		ensure
+			correct_length: Result.count = 16
+			version_5: (Result [7] & 240) = 80
+			variant_rfc4122: (Result [9] & 192) = 128
+
+	new_v5_dns (a_domain: STRING_8): STRING_8
+			-- Generate UUID v5 using DNS namespace for `a_domain`.
+			-- Example: new_v5_dns("www.example.com")
+		require
+			domain_not_void: a_domain /= Void
+			domain_not_empty: not a_domain.is_empty
+		ensure
+			valid_format: is_valid_uuid (Result)
+
+	new_v5_string (a_namespace: ARRAY [NATURAL_8]; a_name: STRING_8): STRING_8
+			-- Generate a deterministic UUID v5 as hyphenated string.
+		require
+			valid_namespace: a_namespace.count = 16
+			name_not_void: a_name /= Void
+		ensure
+			valid_format: is_valid_uuid (Result)
+			correct_length: Result.count = 36
+
+	new_v5_url (a_url: STRING_8): STRING_8
+			-- Generate UUID v5 using URL namespace for `a_url`.
+			-- Example: new_v5_url("https://www.example.com/page")
+		require
+			url_not_void: a_url /= Void
+			url_not_empty: not a_url.is_empty
+		ensure
+			valid_format: is_valid_uuid (Result)
+	
+feature -- UUID v7 (Timestamp)
+
+	new_v7: ARRAY [NATURAL_8]
+			-- Generate a new timestamp-based UUID v7 with monotonicity guarantee.
+			-- Format: tttttttt-tttt-7xxx-yxxx-xxxxxxxxxxxx
+			-- First 48 bits are Unix milliseconds timestamp.
+			-- Includes sequence counter for UUIDs generated in same millisecond.
+			-- Sortable by creation time.
+		ensure
+			correct_length: Result.count = 16
+			version_7: (Result [7] & 240) = 112
+			variant_rfc4122: (Result [9] & 192) = 128
+
+	new_v7_compact: STRING_8
+			-- Generate a new timestamp-based UUID v7 without hyphens.
+		ensure
+			no_hyphens: not Result.has ('-')
+			correct_length: Result.count = 32
+
+	new_v7_string: STRING_8
+			-- Generate a new timestamp-based UUID v7 as string.
+		ensure
+			valid_format: is_valid_uuid (Result)
+			correct_length: Result.count = 36
+	
+feature -- Validation
+
+	is_valid_uuid (a_string: STRING_8): BOOLEAN
+			-- Is `a_string` a valid hyphenated UUID?
+			-- Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+		require
+			string_not_void: a_string /= Void
+
+	is_valid_uuid_compact (a_string: STRING_8): BOOLEAN
+			-- Is `a_string` a valid compact UUID (no hyphens)?
+		require
+			string_not_void: a_string /= Void
+	
+feature -- Version Detection
+
+	version (a_uuid: ARRAY [NATURAL_8]): INTEGER_32
+			-- Get the version number of `a_uuid`.
+		require
+			valid_uuid: a_uuid.count = 16
+		ensure
+			valid_version: Result >= 0 and Result <= 15
+
+	version_from_string (a_string: STRING_8): INTEGER_32
+			-- Get the version number from UUID string.
+		require
+			valid_uuid: is_valid_uuid (a_string) or is_valid_uuid_compact (a_string)
+		ensure
+			valid_version: Result >= 0 and Result <= 15
+	
+invariant
+	random_exists: random /= Void
+
+		-- from ANY
+	reflexive_equality: standard_is_equal (Current)
+	reflexive_conformance: conforms_to (Current)
+
+note
+	copyright: "Copyright (c) 2024-2025, Larry Rix"
+	license: "MIT License"
+
+end -- class SIMPLE_UUID
+
