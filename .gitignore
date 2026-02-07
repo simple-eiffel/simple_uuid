@@ -25,3 +25,5 @@ Documentation/
 Thumbs.db
 
 exception_trace.log
+*.epr
+*.log
